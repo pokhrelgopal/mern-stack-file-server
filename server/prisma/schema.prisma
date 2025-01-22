@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum STATUS {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model User {
+  id                String    @id @default(uuid()) @db.Uuid
+  fullName          String
+  email             String    @unique
+  password          String
+  otp               String?
+  resetToken        String?
+  resetTokenExpires DateTime?
+  status            STATUS    @default(ACTIVE)
+  isVerified        Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model Application {
+  id               String   @id @default(uuid()) @db.Uuid
+  name             String
+  apiKey           String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  totalStorageUsed Int      @default(0)
+  File             File[]
+}
+
+model File {
+  id            String      @id @default(uuid()) @db.Uuid
+  name          String
+  path          String
+  size          Int
+  type          String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String      @db.Uuid
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}

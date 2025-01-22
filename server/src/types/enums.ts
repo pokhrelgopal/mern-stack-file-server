@@ -1,0 +1,1 @@
+type STATUS = "ACTIVE" | "INACTIVE" | "SUSPENDED";

@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@import "./scrollbar-hide.css";
+
+:root {
+  --font-product-sans: var(--font-product-sans);
+}
+
+@theme {
+  --color-primary: #0d9488;
+  --color-background: #f1f5f9;
+  --color-disabled: #f5f7fd;
+  --color-dark: #1c2434;
+
+  --color-ellipse-1: rgba(195, 242, 242, 0.8);
+  --color-ellipse-2: rgba(198, 224, 247, 1);
+  --color-ellipse-3: rgba(244, 215, 232, 1);
+  --color-ellipse-4: rgba(248, 226, 218, 1);
+
+  --color-foreground: #1c2434;
+  --color-card: #ffffff;
+  --color-card-foreground: #1c2434;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #1c2434;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f1f5f9;
+  --color-secondary-foreground: #1c2434;
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #64748b;
+  --color-accent: #f1f5f9;
+  --color-accent-foreground: #1c2434;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #e2e8f0;
+  --color-input: #e2e8f0;
+  --color-ring: #3c50e0;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
