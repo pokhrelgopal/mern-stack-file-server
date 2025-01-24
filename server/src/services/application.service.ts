@@ -32,6 +32,28 @@ const getApplicationById = async (id: string) => {
   }
 };
 
+const getApplicationByApiKey = async (apiKey: string) => {
+  try {
+    const application = await prisma.application.findFirst({
+      where: { apiKey },
+    });
+    return application;
+  } catch (error) {
+    throw new Error("Error fetching application by API key: " + error);
+  }
+};
+
+const getApplicationByName = async (userId: string, name: string) => {
+  try {
+    const application = await prisma.application.findFirst({
+      where: { name, userId },
+    });
+    return application;
+  } catch (error) {
+    throw new Error("Error fetching application by name: " + error);
+  }
+};
+
 const updateApplication = async (
   id: string,
   data: schema.UpdateApplicationData
@@ -76,4 +98,6 @@ export {
   updateApplication,
   deleteApplication,
   getApplicationByUserId,
+  getApplicationByApiKey,
+  getApplicationByName,
 };

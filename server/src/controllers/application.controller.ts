@@ -12,7 +12,20 @@ const createApplication = async (
   next: NextFunction
 ) => {
   try {
-    const data = schema.createApplicationSchema.parse(req.body);
+    const name = req.body.name;
+    const userId = (req as JwtPayload).user.id;
+    const apiKey = generator.generateApiKey(userId, name);
+    const data = schema.createApplicationSchema.parse({
+      ...req.body,
+      apiKey,
+    });
+    const exists = await applicationService.getApplicationByName(userId, name);
+    if (exists) {
+      return response.errorResponse(
+        res,
+        "Application with this name already exists."
+      );
+    }
     const application = await applicationService.createApplication(data);
     return response.successResponse(res, "Application created successfully.", {
       application,

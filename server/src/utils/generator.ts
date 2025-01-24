@@ -13,6 +13,17 @@ const generateJwt = (email: string, id: string): string => {
   return token;
 };
 
+const generateApiKey = (userId: string, applicationName: string): string => {
+  const apiKey = jwt.sign(
+    { userId, applicationName } as JwtPayload,
+    jwtSecret as string,
+    {
+      expiresIn: "365d",
+    }
+  );
+  return apiKey;
+};
+
 const generateRandomSKU = (length = 10) => {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let sku = "";
@@ -55,4 +66,10 @@ const generateSlug = (
   return slug;
 };
 
-export { generateRandomSKU, otpGenerator, generateJwt, generateSlug };
+export {
+  generateRandomSKU,
+  otpGenerator,
+  generateJwt,
+  generateSlug,
+  generateApiKey,
+};
