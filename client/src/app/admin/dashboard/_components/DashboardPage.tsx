@@ -34,6 +34,9 @@ const DashboardPage = () => {
     enabled: !!userData?.data?.user?.id,
     retry: 1,
     staleTime: 300000,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchInterval: 300000,
   });
 
   if (userLoading || applicationsLoading) {
