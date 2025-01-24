@@ -80,9 +80,9 @@ const deleteApplication = async (id: string) => {
   }
 };
 
-const getApplicationByUserId = async (userId: string) => {
+const getApplicationsByUserId = async (userId: string) => {
   try {
-    const application = await prisma.application.findFirst({
+    const application = await prisma.application.findMany({
       where: { userId },
     });
     return application;
@@ -97,7 +97,7 @@ export {
   getApplicationById,
   updateApplication,
   deleteApplication,
-  getApplicationByUserId,
+  getApplicationsByUserId,
   getApplicationByApiKey,
   getApplicationByName,
 };

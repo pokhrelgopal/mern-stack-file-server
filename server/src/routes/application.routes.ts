@@ -11,6 +11,6 @@ router.get("/", isAdmin, uc.getApplications);
 router.get("/:id", auth, uc.getApplicationById);
 router.patch("/:id", auth, uc.updateApplication);
 router.delete("/:id", adminOrSelf, uc.deleteApplication);
-router.get("/user/:userId", auth, uc.getApplicationByUserId);
+router.get("/user/:userId", auth, uc.getApplicationsByUserId);
 
 export default router;

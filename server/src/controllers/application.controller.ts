@@ -18,6 +18,7 @@ const createApplication = async (
     const data = schema.createApplicationSchema.parse({
       ...req.body,
       apiKey,
+      userId,
     });
     const exists = await applicationService.getApplicationByName(userId, name);
     if (exists) {
@@ -124,17 +125,18 @@ const deleteApplication = async (
   }
 };
 
-const getApplicationByUserId = async (
+const getApplicationsByUserId = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const userId = req.params.userId;
-    const application = await applicationService.getApplicationByUserId(userId);
-    if (!application) {
-      return response.errorResponse(res, "Application not found.");
-    }
+    console.log("I am here");
+    const userId = (req as JwtPayload).user.id;
+    console.log(userId);
+    const application = await applicationService.getApplicationsByUserId(
+      userId
+    );
     return response.successResponse(res, "Application fetched successfully.", {
       application,
     });
@@ -149,5 +151,5 @@ export {
   getApplicationById,
   updateApplication,
   deleteApplication,
-  getApplicationByUserId,
+  getApplicationsByUserId,
 };

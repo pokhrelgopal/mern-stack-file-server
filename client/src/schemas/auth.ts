@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const registerSchema = z.object({
+const registerSchema = z.object({
   fullName: z.string().min(1, "Full Name is required"),
   email: z.string().min(1, "Email is required").email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
@@ -9,19 +9,19 @@ export const registerSchema = z.object({
     .min(8, "Confirm Password must be at least 8 characters long"),
 });
 
-export const loginSchema = z.object({
+const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
 });
 
-export const forgotPasswordSchema = z.object({
+const forgotPasswordSchema = z.object({
   email: z
     .string()
     .min(1, { message: "Email is required" })
     .email({ message: "Invalid email address" }),
 });
 
-export const resetPasswordSchema = z
+const resetPasswordSchema = z
   .object({
     password: z
       .string()
@@ -40,12 +40,28 @@ export const resetPasswordSchema = z
     message: "Passwords do not match",
   });
 
-export const OtpSchema = z.object({
+const OtpSchema = z.object({
   otp: z.string().min(6, "OTP must be 6 digits").max(6, "OTP must be 6 digits"),
 });
 
-export type RegisterFormData = z.infer<typeof registerSchema>;
-export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
-export type LoginFormData = z.infer<typeof loginSchema>;
-export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
-export type OtpFormData = z.infer<typeof OtpSchema>;
+type RegisterFormData = z.infer<typeof registerSchema>;
+type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+type LoginFormData = z.infer<typeof loginSchema>;
+type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
+type OtpFormData = z.infer<typeof OtpSchema>;
+
+export {
+  registerSchema,
+  loginSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  OtpSchema,
+};
+
+export {
+  type RegisterFormData,
+  type ResetPasswordFormData,
+  type LoginFormData,
+  type ForgotPasswordFormData,
+  type OtpFormData,
+};
