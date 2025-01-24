@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getMyApplications } from "@/lib/api/requests/app.requests";
 import { me } from "@/lib/api/requests";
 import Spinner from "@/components/elements/spinner";
-
+import { queryKeys } from "@/constants/query-keys";
 import { Application } from "@/types/application.types";
 import ApplicationCard from "./ApplicationCard";
 
@@ -18,7 +18,7 @@ const DashboardPage = () => {
     isLoading: userLoading,
     error: userError,
   } = useQuery({
-    queryKey: ["me"],
+    queryKey: [queryKeys.me],
     queryFn: me,
     retry: 1,
     staleTime: 300000,
@@ -29,7 +29,7 @@ const DashboardPage = () => {
     isLoading: applicationsLoading,
     error: applicationsError,
   } = useQuery({
-    queryKey: ["myApplications", userData?.data?.user?.id],
+    queryKey: [queryKeys.myApplication, userData?.data?.user?.id],
     queryFn: () => getMyApplications(userData?.data?.user?.id || ""),
     enabled: !!userData?.data?.user?.id,
     retry: 1,
@@ -60,7 +60,7 @@ const DashboardPage = () => {
     <article className="w-full p-4">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold mb-4">My Applications</h1>
-        <Link href="/new-application">
+        <Link href="/admin/dashboard/create-application">
           <Button>
             <Plus className="mr-2 h-4 w-4" /> Create New Application
           </Button>

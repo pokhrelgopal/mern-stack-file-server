@@ -1,5 +1,5 @@
 import React from "react";
-import { Key, Calendar, Database } from "lucide-react";
+import { Calendar, Database } from "lucide-react";
 import { Application } from "@/types/application.types";
 import {
   Card,
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "iconsax-react";
+import { formatDate } from "date-fns";
 type Props = {
   application: Application;
 };
@@ -25,14 +26,12 @@ const ApplicationCard = ({ application: app }: Props) => {
           <div className="flex items-center">
             <Calendar className="w-5 h-5 mr-2" />
             <span className="text-sm">
-              Created: {new Date(app.createdAt).toLocaleDateString()}
+              {formatDate(new Date(app.createdAt), "dd MMM yyyy")}
             </span>
           </div>
           <div className="flex items-center">
             <Database className="w-5 h-5 mr-2" />
-            <span className="text-sm">
-              Storage Used: {app.totalStorageUsed} bytes
-            </span>
+            <span className="text-sm">{app.totalStorageUsed} bytes</span>
           </div>
         </div>
       </CardContent>

@@ -5,31 +5,51 @@ import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { ArrowLeft } from "iconsax-react";
-
-const appSchema = z.object({
-  applicationName: z
-    .string()
-    .min(3, "Application name must be at least 3 characters")
-    .max(50, "Application name must not exceed 40 characters"),
-});
-
-type AppSchema = z.infer<typeof appSchema>;
+import {
+  CreateApplicationData,
+  createApplicationSchema,
+} from "@/schemas/application";
+import {
+  QueryClient,
+  useMutation,
+  InvalidateQueryFilters,
+} from "@tanstack/react-query";
+import { createApplication } from "@/lib/api/requests/app.requests";
+import { queryKeys } from "@/constants/query-keys";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function CreateApplications() {
+  const { showToast } = useToast();
+  const queryClient = new QueryClient();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AppSchema>({
-    resolver: zodResolver(appSchema),
+  } = useForm<CreateApplicationData>({
+    resolver: zodResolver(createApplicationSchema),
   });
 
-  const onSubmit = (data: AppSchema) => {
-    console.log("Form submitted successfully:", data);
+  const { mutate, isPending } = useMutation({
+    mutationFn: createApplication,
+    onSuccess: () => {
+      queryClient.invalidateQueries(
+        queryKeys.myApplication as InvalidateQueryFilters
+      );
+      showToast("Application created successfully", "success");
+      router.push("/admin/dashboard");
+    },
+    onError: (error) => {
+      showToast(error.message || "Something went wrong !", "error");
+    },
+  });
+
+  const onSubmit = (data: CreateApplicationData) => {
+    mutate(data);
   };
 
   return (
@@ -42,17 +62,23 @@ export default function CreateApplications() {
         <div className="grid w-full grid-cols-3 gap-6 my-5">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-2">
-              <label htmlFor="applicationName" className="font-medium">
+              <label htmlFor="name" className="font-medium">
                 Application Name
               </label>
               <Input
-                id="applicationName"
+                id="name"
                 placeholder="Enter application name"
-                {...register("applicationName")}
-                errorMessage={errors.applicationName?.message}
+                {...register("name")}
+                errorMessage={errors.name?.message}
               />
             </div>
-            <Button size={"lg"} className="mt-4" type="submit">
+            <Button
+              loading={isPending}
+              loadingText="Creating"
+              size={"lg"}
+              className="mt-4"
+              type="submit"
+            >
               <Plus size={16} />
               Create app
             </Button>
