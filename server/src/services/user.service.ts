@@ -2,7 +2,7 @@ import prisma from "../db/prisma";
 import { RegisterData, UserUpdateData } from "../schema/user.schema";
 import { getHashedPassword } from "../utils/password";
 
-export const register = async (data: RegisterData) => {
+const register = async (data: RegisterData) => {
   try {
     const existingUser = await prisma.user.findUnique({
       where: {
@@ -25,7 +25,7 @@ export const register = async (data: RegisterData) => {
   }
 };
 
-export const getUserByEmail = async (email: string) => {
+const getUserByEmail = async (email: string) => {
   try {
     const user = await prisma.user.findUnique({
       where: { email },
@@ -36,7 +36,7 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
-export const getUserById = async (id: string) => {
+const getUserById = async (id: string) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id },
@@ -55,7 +55,7 @@ export const getUserById = async (id: string) => {
   }
 };
 
-export const getUserByToken = async (token: string) => {
+const getUserByToken = async (token: string) => {
   try {
     const user = await prisma.user.findFirst({
       where: { resetToken: token },
@@ -66,7 +66,7 @@ export const getUserByToken = async (token: string) => {
   }
 };
 
-export const getUserWithEmailAndOtp = async (email: string, otp: string) => {
+const getUserWithEmailAndOtp = async (email: string, otp: string) => {
   try {
     const user = await prisma.user.findFirst({
       where: { email, otp },
@@ -77,7 +77,7 @@ export const getUserWithEmailAndOtp = async (email: string, otp: string) => {
   }
 };
 
-export const getUsers = async (page: number, limit: number) => {
+const getUsers = async (page: number, limit: number) => {
   try {
     return await prisma.user.findMany({
       skip: page,
@@ -95,11 +95,11 @@ export const getUsers = async (page: number, limit: number) => {
   }
 };
 
-export const update = async (userId: string, data: UserUpdateData) => {
+const update = async (userId: string, data: UserUpdateData) => {
   return await prisma.user.update({ where: { id: userId }, data: data });
 };
 
-export const remove = async (id: string) => {
+const remove = async (id: string) => {
   try {
     const user = await prisma.user.delete({
       where: { id },
@@ -108,4 +108,15 @@ export const remove = async (id: string) => {
   } catch (error) {
     throw new Error("Error deleting user: " + error);
   }
+};
+
+export {
+  register,
+  getUserByEmail,
+  getUserById,
+  getUserByToken,
+  getUserWithEmailAndOtp,
+  getUsers,
+  update,
+  remove,
 };

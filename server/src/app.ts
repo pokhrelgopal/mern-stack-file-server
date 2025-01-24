@@ -23,5 +23,6 @@ app.use(
 app.use(middleware.logger);
 
 app.use("/api/users", routes.userRoutes);
+app.use("/api/applications", routes.applicationRoutes);
 
 export default app;

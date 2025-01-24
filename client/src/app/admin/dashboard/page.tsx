@@ -7,7 +7,7 @@ import JobCard from "./_components/JobCard";
 
 export default function Dashboard() {
   return (
-    <article className="w-full p-6">
+    <article className="w-full">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold">Applications</h1>
         <Link href="/admin/dashboard/create-application">

@@ -14,17 +14,19 @@ enum STATUS {
 }
 
 model User {
-  id                String    @id @default(uuid()) @db.Uuid
+  id                String       @id @default(uuid()) @db.Uuid
   fullName          String
-  email             String    @unique
+  email             String       @unique
   password          String
   otp               String?
   resetToken        String?
   resetTokenExpires DateTime?
-  status            STATUS    @default(ACTIVE)
-  isVerified        Boolean   @default(false)
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  status            STATUS       @default(ACTIVE)
+  isVerified        Boolean      @default(false)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  Application       Application? @relation(fields: [applicationId], references: [id])
+  applicationId     String?      @db.Uuid
 }
 
 model Application {
@@ -35,6 +37,8 @@ model Application {
   updatedAt        DateTime @updatedAt
   totalStorageUsed Int      @default(0)
   File             File[]
+  user             User[]
+  userId           String   @db.Uuid
 }
 
 model File {

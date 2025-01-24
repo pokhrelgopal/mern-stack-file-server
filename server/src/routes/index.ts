@@ -1,5 +1,7 @@
-import userRoutes from "./userRoutes";
+import applicationRoutes from "./application.routes";
+import userRoutes from "./user.routes";
 
 export default {
+  applicationRoutes,
   userRoutes,
 };

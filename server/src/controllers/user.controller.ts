@@ -9,11 +9,7 @@ import * as response from "../utils/response";
 import * as schema from "../schema/user.schema";
 import * as generator from "../utils/generator";
 
-export const register = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = schema.registerSchema.parse(req.body);
     const exists = await userService.getUserByEmail(data.email);
@@ -43,11 +39,7 @@ export const register = async (
   }
 };
 
-export const login = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const login = async (req: Request, res: Response, next: NextFunction) => {
   const data = schema.loginSchema.parse(req.body);
   try {
     const user = await userService.getUserByEmail(data.email);
@@ -85,11 +77,7 @@ export const login = async (
   }
 };
 
-export const logout = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const logout = async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.clearCookie("token");
     return response.successResponse(res, "User logged out successfully.");
@@ -98,7 +86,7 @@ export const logout = async (
   }
 };
 
-export const forgotPassword = async (
+const forgotPassword = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -129,7 +117,7 @@ export const forgotPassword = async (
   }
 };
 
-export const setNewPassword = async (
+const setNewPassword = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -177,11 +165,7 @@ export const setNewPassword = async (
   }
 };
 
-export const verifyUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = schema.verifyUserSchema.parse(req.body);
     const { email, otp } = data;
@@ -202,11 +186,7 @@ export const verifyUser = async (
   }
 };
 
-export const getUsers = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const offset = (Number(page) - 1) * Number(limit);
@@ -221,11 +201,7 @@ export const getUsers = async (
   }
 };
 
-export const getUserById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getUserById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = schema.queryParamSchema.parse(req.params);
     const user = await userService.getUserById(data.id);
@@ -243,11 +219,7 @@ export const getUserById = async (
   }
 };
 
-export const updateUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const query = schema.queryParamSchema.parse(req.params);
     const data = schema.userUpdateSchema.parse(req.body);
@@ -267,11 +239,7 @@ export const updateUser = async (
   }
 };
 
-export const deleteUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const query = schema.queryParamSchema.parse(req.params);
     const user = await userService.getUserById(query.id);
@@ -288,11 +256,7 @@ export const deleteUser = async (
   }
 };
 
-export const getMe = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getMe = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = (req as JwtPayload).user.id;
     if (!userId) {
@@ -311,4 +275,18 @@ export const getMe = async (
     }
     next(error);
   }
+};
+
+export {
+  register,
+  login,
+  logout,
+  forgotPassword,
+  setNewPassword,
+  verifyUser,
+  getUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+  getMe,
 };
