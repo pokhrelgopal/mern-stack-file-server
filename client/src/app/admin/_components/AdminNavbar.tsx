@@ -9,7 +9,7 @@ type AdminNavbarProps = {
 const AdminNavbar = ({ className }: AdminNavbarProps) => {
   return (
     <div className={cn(className)}>
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-end h-10">
         <div className="flex items-center space-x-4">
           <UserMenu />
         </div>

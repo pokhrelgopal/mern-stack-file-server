@@ -3,22 +3,21 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 import JobCard from "./_components/JobCard";
 
 export default function Dashboard() {
   return (
-    <article>
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Applications</h1>
+    <article className="w-full p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-semibold">Applications</h1>
         <Link href="/admin/dashboard/create-application">
-          <Button className="mt-4">
-            <Plus size={16} />
+          <Button className="bg-teal-600 hover:bg-teal-700">
+            <Plus className="w-4 h-4 mr-2" />
             Create a new app
           </Button>
         </Link>
       </div>
-      <div className="grid grid-cols-3 gap-6 my-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <JobCard />
         <JobCard />
         <JobCard />

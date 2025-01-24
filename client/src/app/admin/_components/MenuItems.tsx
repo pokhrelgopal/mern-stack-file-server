@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 const MenuItems = () => {
   const pathname = usePathname();
-  const activeClass = "bg-gray-200 text-gray-800";
+  const activeClass = "bg-gray-100 text-gray-800";
 
   return (
     <nav>
@@ -19,7 +19,7 @@ const MenuItems = () => {
             {category.items.map((item, itemIndex) => (
               <li
                 key={itemIndex}
-                className={`hover:bg-gray-200 rounded p-1.5 ${
+                className={`hover:bg-gray-100 rounded p-1.5 ${
                   pathname.includes(item.href) ? activeClass : "text-gray-800"
                 }`}
               >

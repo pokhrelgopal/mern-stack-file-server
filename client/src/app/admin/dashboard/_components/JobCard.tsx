@@ -19,28 +19,27 @@ export default function JobCard({
   onLearnMore,
 }: JobCardProps) {
   return (
-    <div className="w-full max-w-md bg-white rounded-lg shadow p-6">
+    <div className="w-full bg-white rounded-lg border shadow-sm p-6">
       <div className="flex justify-between items-start mb-4">
-        <h2 className="text-2xl font-semibold text-gray-900">{title}</h2>
-        <span className="px-3 py-1 text-xs font-medium text-emerald-800 bg-emerald-100 rounded-full">
+        <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+        <span className="px-2.5 py-0.5 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-full">
           {department}
         </span>
       </div>
-      <p className="text-gray-600 mb-6">{description}</p>
-      <div className="flex gap-6 text-gray-600 mb-6">
-        <div className="flex items-center gap-2">
-          <Box1 className="w-4 h-4 stroke-accent-foreground" />
-          <span>{storage}</span>
-        </div>
+      <p className="text-gray-600 text-sm mb-4">{description}</p>
+      <div className="flex items-center gap-2 text-gray-600 mb-4">
+        <Box1 className="w-4 h-4" />
+        <span className="text-sm">{storage}</span>
       </div>
       <div className="flex justify-end">
         <Button
-          variant={"secondary"}
-          className="rounded-full"
+          variant="secondary"
+          size="sm"
+          className="text-sm"
           onClick={onLearnMore}
         >
           View Details
-          <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+          <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
     </div>

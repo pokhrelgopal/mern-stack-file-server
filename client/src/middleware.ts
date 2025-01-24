@@ -1,4 +1,4 @@
-import { jwtVerify } from "jose";
+import { jwtDecode } from "jwt-decode";
 import { NextRequest, NextResponse } from "next/server";
 
 const publicRoutes = [
@@ -7,6 +7,20 @@ const publicRoutes = [
   "/admin/forgot-password",
 ];
 
+const restrictedIfLoggedIn = [
+  "/admin/login",
+  "/admin/register",
+  "/admin/forgot-password",
+  "/admin/reset-password",
+];
+
+interface DecodedToken {
+  email: string;
+  id: string;
+  iat: number;
+  exp: number;
+}
+
 const isProtectedRoute = (path: string): boolean =>
   path.startsWith("/admin") &&
   !publicRoutes.some((route) => path.startsWith(route));
@@ -14,22 +28,27 @@ const isProtectedRoute = (path: string): boolean =>
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
   const path = request.nextUrl.pathname;
+  let isLoggedIn = false;
 
-  if (!token && isProtectedRoute(path)) {
-    return NextResponse.redirect(new URL("/admin/login", request.url));
+  if (token) {
+    try {
+      const decodedToken = jwtDecode<DecodedToken>(token);
+      const now = Date.now() / 1000;
+      isLoggedIn = now < decodedToken.exp;
+    } catch (error) {
+      isLoggedIn = false;
+    }
   }
 
-  if (token && publicRoutes.some((route) => path.startsWith(route))) {
-    try {
-      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-      await jwtVerify(token, secret);
+  if (isProtectedRoute(path)) {
+    if (!isLoggedIn) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
+  }
+
+  if (restrictedIfLoggedIn.some((route) => path.startsWith(route))) {
+    if (isLoggedIn) {
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    } catch (error) {
-      const response = NextResponse.redirect(
-        new URL("/admin/login", request.url)
-      );
-      response.cookies.delete("token");
-      return response;
     }
   }
 
