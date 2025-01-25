@@ -43,7 +43,15 @@ const resetPasswordSchema = z
 const OtpSchema = z.object({
   otp: z.string().min(6, "OTP must be 6 digits").max(6, "OTP must be 6 digits"),
 });
+const updateProfileSchema = z.object({
+  fullName: z
+    .string()
+    .min(3, "Fullname must be at least 3 characters")
+    .max(50, "Fullname must not exceed 40 characters"),
+  email: z.string().email("Invalid email address"),
+});
 
+type UpdateProfileType = z.infer<typeof updateProfileSchema>;
 type RegisterFormData = z.infer<typeof registerSchema>;
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -56,6 +64,7 @@ export {
   forgotPasswordSchema,
   resetPasswordSchema,
   OtpSchema,
+  updateProfileSchema,
 };
 
 export {
@@ -64,4 +73,5 @@ export {
   type LoginFormData,
   type ForgotPasswordFormData,
   type OtpFormData,
+  type UpdateProfileType,
 };

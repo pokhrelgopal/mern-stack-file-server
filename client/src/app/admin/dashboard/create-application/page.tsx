@@ -59,21 +59,15 @@ export default function CreateApplications() {
         </div>
         <div className="grid w-full grid-cols-3 gap-6 my-5">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col gap-3">
-           
+            <div className="flex flex-col gap-2">
+              <label htmlFor="name" className="font-medium">
+                Application Name
+              </label>
               <Input
-              label="Application Name"
                 id="name"
                 placeholder="Enter application name"
                 {...register("name")}
                 errorMessage={errors.name?.message}
-              />
-              <Input
-                id="url"
-                label="Application URL"
-                placeholder="Enter application URL"
-                {...register("url")}
-                errorMessage={errors.url?.message}
               />
             </div>
             <Button

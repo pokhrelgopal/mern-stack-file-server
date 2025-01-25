@@ -132,9 +132,7 @@ const getApplicationsByUserId = async (
   next: NextFunction
 ) => {
   try {
-    console.log("I am here");
     const userId = (req as JwtPayload).user.id;
-    console.log(userId);
     const application = await applicationService.getApplicationsByUserId(
       userId
     );
