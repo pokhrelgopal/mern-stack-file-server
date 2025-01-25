@@ -21,6 +21,15 @@ import { formatDate } from "date-fns";
 import FileTableHeader from "./FileTableHeader";
 import FileTableSearch from "./FileTableSearch";
 import { Pagination } from "@/components/elements/pagination";
+import EmptyState from "./EmptyState";
+import { CustomAlertDialog } from "@/components/elements/alert-dialog";
+import {
+  useMutation,
+  useQueryClient,
+  InvalidateQueryFilters,
+} from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { deleteFile } from "@/lib/api/requests/file.requests";
 
 const columnHelper = createColumnHelper<File>();
 
@@ -31,7 +40,18 @@ interface FileTableProps {
 
 const FileTable = ({ data, apiKey }: FileTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([]);
-
+  const queryClient = useQueryClient();
+  const { showToast } = useToast();
+  const { mutate, isPending } = useMutation({
+    mutationFn: (id: string) => deleteFile(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["application"] as InvalidateQueryFilters);
+      showToast("File deleted successfully", "success");
+    },
+    onError: (error) => {
+      showToast(error.message, "error");
+    },
+  });
   const columns: ColumnDef<File, any>[] = [
     {
       id: "select",
@@ -123,12 +143,23 @@ const FileTable = ({ data, apiKey }: FileTableProps) => {
       header: "Actions",
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <Button variant={"ghost"} size={"icon"} className="p-1">
-            <Trash
-              size={20}
-              className="text-red-600 stroke-red-600 cursor-pointer"
-            />
-          </Button>
+          <CustomAlertDialog
+            title="Delete File"
+            description="Are you sure you want to delete this file?"
+            actionText="Delete"
+            cancelText="Cancel"
+            onAction={() => {
+              mutate(row.original.id);
+            }}
+            trigger={
+              <Button variant={"ghost"} size={"icon"} className="p-1">
+                <Trash
+                  size={20}
+                  className="text-red-600 stroke-red-600 cursor-pointer"
+                />
+              </Button>
+            }
+          />
         </div>
       ),
     },
@@ -148,59 +179,65 @@ const FileTable = ({ data, apiKey }: FileTableProps) => {
   });
 
   return (
-    <div className="mt-4 bg-white p-5 min-h-[500px] rounded-lg shadow-xs flex flex-col justify-between">
+    <div className="mt-4 bg-white p-5 min-h-[500px] rounded-lg flex flex-col justify-between">
       <div>
         <FileTableHeader apiKey={apiKey} />
         <FileTableSearch />
-        <div className="overflow-x-auto mt-4 border border-gray-200 rounded-lg">
-          <table className="min-w-full">
-            <thead className="border-b border-gray-200">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr
-                  key={headerGroup.id}
-                  className="divide-x divide-line-divider"
-                >
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      scope="col"
-                      className="p-3 text-left text-gray-600 text-b2b"
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {table.getRowModel().rows.map((row, index) => (
-                <tr
-                  key={row.id}
-                  className={`divide-x divide-line-divider ${
-                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                  }`}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="p-2 whitespace-nowrap text-gray-600 text-b2"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {data.length == 0 ? (
+          <div className="mt-4 bg-white p-5 min-h-[400px] rounded-lg flex flex-col justify-center">
+            <EmptyState />
+          </div>
+        ) : (
+          <div className="overflow-x-auto mt-4 border border-gray-100">
+            <table className="min-w-full">
+              <thead className="border-b border-gray-100">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr
+                    key={headerGroup.id}
+                    className="divide-x divide-line-divider"
+                  >
+                    {headerGroup.headers.map((header) => (
+                      <th
+                        key={header.id}
+                        scope="col"
+                        className="p-3 text-left text-gray-600 text-b2b"
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {table.getRowModel().rows.map((row, index) => (
+                  <tr
+                    key={row.id}
+                    className={`divide-x divide-line-divider ${
+                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                    }`}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className="p-2 whitespace-nowrap text-gray-600 text-b2"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
       <div className="mt-8">
         <Pagination totalPages={10} />

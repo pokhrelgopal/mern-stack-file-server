@@ -22,7 +22,6 @@ const ApplicationContainer = ({ id }: Props) => {
     enabled: !!id,
   });
   if (isLoading) return <Spinner />;
-  console.log(data);
   return (
     <>
       <div className="mb-5">
