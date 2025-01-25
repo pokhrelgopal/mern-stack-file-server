@@ -15,8 +15,8 @@ export interface Application {
   id: string;
   name: string;
   apiKey: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   totalStorageUsed: number;
   userId: string;
   File: File[];
@@ -29,5 +29,5 @@ export type ApplicationResponse = SuccessResponse<{
 }>;
 
 export type ApplicationListResponse = SuccessResponse<{
-  applications: Application[];
+  application: Application[];
 }>;

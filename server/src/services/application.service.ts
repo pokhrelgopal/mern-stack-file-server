@@ -27,7 +27,24 @@ const getApplicationById = async (id: string) => {
       where: { id },
       include: { File: true },
     });
-    return application;
+
+    if (!application) {
+      throw new Error("Application not found");
+    }
+
+    const totalFileSize = application.File.reduce(
+      (acc, file) => acc + file.size,
+      0
+    );
+    const fileCount = application.File.length;
+
+    const result = {
+      ...application,
+      totalFileSize,
+      fileCount,
+    };
+
+    return result;
   } catch (error) {
     throw new Error("Error fetching application by ID: " + error);
   }

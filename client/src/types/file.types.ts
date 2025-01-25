@@ -8,6 +8,6 @@ export interface File {
   url: string;
   type: string;
   applicationId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
