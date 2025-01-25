@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Stack } from "@/components/ui/stack";
-import { CheckCircle, Plus, Upload } from "lucide-react";
+import { CheckCircle, Plus, Upload, X } from "lucide-react";
 import Dropzone from "react-dropzone";
 import { uploadFile } from "@/lib/api/requests/file.requests";
 import {
@@ -20,9 +20,13 @@ import {
 } from "@/components/ui/sheet";
 import Spinner from "@/components/elements/spinner";
 
+const MAX_FILE_SIZE = 50 * 1024 * 1024;
+
 const FileTableHeader: React.FC<{ apiKey?: string }> = ({ apiKey }) => {
   const { showToast } = useToast();
-  const [success, setSuccess] = React.useState(false);
+  const [status, setStatus] = React.useState<"success" | "failed" | "none">(
+    "none"
+  );
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: (file: File) => {
@@ -32,16 +36,23 @@ const FileTableHeader: React.FC<{ apiKey?: string }> = ({ apiKey }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["application"] as InvalidateQueryFilters);
-      setSuccess(true);
+      setStatus("success");
     },
     onError: (error) => {
+      setStatus("failed");
       showToast(error.message, "error");
     },
   });
 
   const handleFileDrop = (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
-      mutate(acceptedFiles[0]);
+      const file = acceptedFiles[0];
+      if (file.size > MAX_FILE_SIZE) {
+        showToast("File size exceeds 50 MB limit", "error");
+        return;
+      }
+
+      mutate(file);
     }
   };
 
@@ -90,10 +101,16 @@ const FileTableHeader: React.FC<{ apiKey?: string }> = ({ apiKey }) => {
                   </section>
                 )}
               </Dropzone>
-              {success && !isPending && (
-                <div className="mt-4 px-3 py-5 flex gap-2 items-center rounded-lg bg-green-100 text-green-900">
+              {status === "success" && !isPending && (
+                <div className="mt-4 p-3 flex gap-2 items-center rounded-lg bg-green-100 text-green-900">
                   <CheckCircle className="h-5 w-5 mr-2" />
-                  <span>File Uploaded Successfully.</span>
+                  <span>Updated Successfully.</span>
+                </div>
+              )}
+              {status === "failed" && !isPending && (
+                <div className="mt-4 p-3 flex gap-2 items-center rounded-lg bg-red-100 text-red-900">
+                  <X className="h-5 w-5 mr-2" />
+                  <span>Update Failed.</span>
                 </div>
               )}
             </div>

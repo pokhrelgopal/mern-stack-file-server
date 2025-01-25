@@ -57,7 +57,7 @@ export function Toast({
       exit={{ y: -50, opacity: 0 }}
       transition={{ type: "spring", stiffness: 100, damping: 15 }}
       className={cn(
-        "fixed top-8 left-1/2 transform -translate-x-1/2 z-50",
+        "fixed top-8 left-1/2 transform -translate-x-[calc(100vw/2)] z-50",
         toastVariants({ variant }),
         className
       )}

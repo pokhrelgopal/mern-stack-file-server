@@ -10,6 +10,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+// import { CustomAlertDialog } from "@/components/elements/alert-dialog";
 
 interface KeyContainerProps {
   apiKey?: string;
@@ -44,14 +45,19 @@ export default function KeyContainer({ apiKey }: KeyContainerProps) {
             </CardTitle>
             <CardDescription>View and manage your API keys</CardDescription>
           </div>
-          <Button
-            onClick={handleRollKey}
-            variant="secondary"
-            className="w-fit"
-            size="sm"
-          >
-            Roll Key
-          </Button>
+
+          {/* <CustomAlertDialog
+            actionText="Roll Key"
+            cancelText="Cancel"
+            title="Roll API Key"
+            onAction={handleRollKey}
+            description="This will invalidate the current key and generate a new one. This will affect your existing projects and integrations."
+            trigger={
+              <Button variant="secondary" className="w-fit" size="sm">
+                Roll Key
+              </Button>
+            }
+          /> */}
         </div>
       </CardHeader>
       <CardContent>
