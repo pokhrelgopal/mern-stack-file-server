@@ -37,9 +37,7 @@ export default function CreateApplications() {
   const { mutate, isPending } = useMutation({
     mutationFn: createApplication,
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        queryKeys.myApplication as InvalidateQueryFilters
-      );
+      queryClient.invalidateQueries("myApplications" as InvalidateQueryFilters);
       showToast("Application created successfully", "success");
       router.push("/admin/dashboard");
     },

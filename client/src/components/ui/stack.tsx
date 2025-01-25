@@ -17,6 +17,7 @@ const stackVariants = cva("w-full flex gap-2", {
       start: "justify-start",
       center: "justify-center",
       end: "justify-end",
+      between: "justify-between",
     },
   },
   defaultVariants: {
