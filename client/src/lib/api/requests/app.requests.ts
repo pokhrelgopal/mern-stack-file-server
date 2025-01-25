@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ApiError, ApiResponse } from "@/types/response.types";
 import {
-  ApplicationDetailResponse,
+  ApplicationListResponse,
   ApplicationResponse,
 } from "@/types/application.types";
 import {
@@ -18,7 +18,7 @@ export const getMyApplications = async (userId: string) => {
         withCredentials: true,
       }
     );
-    return response.data as ApplicationResponse;
+    return response.data as ApplicationListResponse;
   } catch (error) {
     const err = error as ApiError;
     throw err.response?.data;
@@ -30,7 +30,7 @@ export const getApplication = async (id: string) => {
     const response = await axios.get(applicationRoutes.application(id), {
       withCredentials: true,
     });
-    return response.data as ApplicationDetailResponse;
+    return response.data as ApplicationResponse;
   } catch (error) {
     const err = error as ApiError;
     throw err.response?.data;

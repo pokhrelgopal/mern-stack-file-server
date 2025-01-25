@@ -33,7 +33,7 @@ const ApplicationCard = ({ application: app }: Props) => {
             </div>
             <div className="flex items-center">
               <Database className="w-5 h-5 mr-2" />
-              <span className="text-sm">{app.totalStorageUsed} bytes</span>
+              <span className="text-sm">{app.totalFileSize} bytes</span>
             </div>
           </div>
         </CardContent>

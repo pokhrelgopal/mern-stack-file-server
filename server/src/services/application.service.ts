@@ -85,12 +85,26 @@ const deleteApplication = async (id: string) => {
 
 const getApplicationsByUserId = async (userId: string) => {
   try {
-    const application = await prisma.application.findMany({
+    const applications = await prisma.application.findMany({
       where: { userId },
+      include: {
+        File: true,
+      },
     });
-    return application;
+
+    const result = applications.map((app) => {
+      const totalFileSize = app.File.reduce((acc, file) => acc + file.size, 0);
+      const fileCount = app.File.length;
+      return {
+        ...app,
+        totalFileSize,
+        fileCount,
+      };
+    });
+
+    return result;
   } catch (error) {
-    throw new Error("Error fetching application by user ID: " + error);
+    throw new Error("Error fetching applications by user ID: " + error);
   }
 };
 

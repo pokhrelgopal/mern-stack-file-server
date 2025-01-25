@@ -55,6 +55,7 @@ export const handleFileUpload = (
       try {
         const validFileData = createFileSchema.parse(fileData);
         const savedFile = await fileService.createFile(validFileData);
+
         resolve(savedFile);
       } catch (validationError) {
         reject(validationError);

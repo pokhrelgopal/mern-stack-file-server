@@ -9,6 +9,7 @@ const createApplicationSchema = z.object({
 const updateApplicationSchema = z.object({
   name: z.string().optional(),
   apiKey: z.string().optional(),
+  totalStorageUsed: z.number().optional(),
 });
 
 type CreateApplicationData = z.infer<typeof createApplicationSchema>;

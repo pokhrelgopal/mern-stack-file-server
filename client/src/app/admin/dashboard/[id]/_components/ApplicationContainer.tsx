@@ -1,4 +1,5 @@
 "use client";
+import Spinner from "@/components/elements/spinner";
 import { getApplication } from "@/lib/api/requests/app.requests";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
@@ -13,7 +14,7 @@ const ApplicationContainer = ({ id }: Props) => {
     queryFn: () => getApplication(id),
     enabled: !!id,
   });
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Spinner />;
   console.log(data);
   return <div>ApplicationContainer</div>;
 };
