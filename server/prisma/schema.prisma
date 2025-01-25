@@ -48,6 +48,7 @@ model File {
   name          String
   path          String
   size          Int
+  url           String
   type          String
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   applicationId String      @db.Uuid

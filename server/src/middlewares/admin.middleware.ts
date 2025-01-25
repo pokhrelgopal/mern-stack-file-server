@@ -15,11 +15,6 @@ export const isAdmin = async (
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
     (req as any).user = decoded;
-
-    const user = await prisma.user.findUnique({
-      where: { id: (req as any).user.userId },
-    });
-
     next();
   } catch (error) {
     console.error("Middleware error:", error);
