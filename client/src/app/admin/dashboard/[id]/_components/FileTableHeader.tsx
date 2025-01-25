@@ -91,7 +91,7 @@ const FileTableHeader: React.FC<{ apiKey?: string }> = ({ apiKey }) => {
                 )}
               </Dropzone>
               {success && !isPending && (
-                <div className="mt-4 px-3 py-5 flex gap-2 items-center rounded-lg bg-green-100 text-green-700">
+                <div className="mt-4 px-3 py-5 flex gap-2 items-center rounded-lg bg-green-100 text-green-900">
                   <CheckCircle className="h-5 w-5 mr-2" />
                   <span>File Uploaded Successfully.</span>
                 </div>

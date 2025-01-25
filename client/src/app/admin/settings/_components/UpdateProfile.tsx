@@ -4,19 +4,34 @@ import { Badge } from "@/components/ui/badge";
 import UpdateProfileSheet from "./UpdateProfileSheet";
 import React from "react";
 
-const UpdateProfile = () => {
+import { Skeleton } from "@/components/ui/skeleton";
+import { UserResponse } from "@/types";
+
+interface UpdateProfileProps {
+  data?: UserResponse;
+  isLoading: boolean;
+}
+
+const UpdateProfile = ({ data, isLoading }: UpdateProfileProps) => {
   return (
     <div className="bg-white p-4 rounded flex justify-between items-center">
       <div>
         <h3 className="text-xl font-bold">Profile</h3>
-        <div className="flex gap-3">
-          <p className="text-sm">pokhrelgopal27@gmail.com</p>
-          <Badge className="text-xs" variant="success">
-            Primary Email
-          </Badge>
-        </div>
+        {!isLoading ? (
+          <div className="flex gap-3">
+            <p className="text-sm">{data?.data.user.fullName}</p>
+            <Badge className="text-xs" variant="success">
+              {data?.data.user.email}
+            </Badge>
+          </div>
+        ) : (
+          <div className="flex gap-3 py-1">
+            <Skeleton className="w-24 h-4 bg-gray-100" />
+            <Skeleton className="w-44 h-4 bg-gray-100" />
+          </div>
+        )}
       </div>
-      <UpdateProfileSheet />
+      <UpdateProfileSheet user={data?.data.user} />
     </div>
   );
 };

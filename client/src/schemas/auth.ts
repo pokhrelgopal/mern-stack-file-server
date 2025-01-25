@@ -48,7 +48,6 @@ const updateProfileSchema = z.object({
     .string()
     .min(3, "Fullname must be at least 3 characters")
     .max(50, "Fullname must not exceed 40 characters"),
-  email: z.string().email("Invalid email address"),
 });
 
 type UpdateProfileType = z.infer<typeof updateProfileSchema>;

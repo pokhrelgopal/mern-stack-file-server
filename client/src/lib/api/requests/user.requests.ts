@@ -1,5 +1,9 @@
 import axios from "axios";
-import { LoginFormData, RegisterFormData } from "@/schemas/auth";
+import {
+  LoginFormData,
+  RegisterFormData,
+  UpdateProfileType,
+} from "@/schemas/auth";
 import { ApiError, ApiResponse } from "@/types/response.types";
 import { userRoutes } from "../routes/user.routes";
 import { UserResponse } from "@/types/user.types";
@@ -91,6 +95,19 @@ export const resetPassword = async ({
     });
     return response.data as ApiResponse;
   } catch (error) {
+    const err = error as ApiError;
+    throw err.response?.data;
+  }
+};
+
+export const updateProfile = async (data: UpdateProfileType, id: string) => {
+  try {
+    const response = await axios.patch(userRoutes.updateProfile(id), data, {
+      withCredentials: true,
+    });
+    return response.data as ApiResponse;
+  } catch (error) {
+    console.log("Error:", error);
     const err = error as ApiError;
     throw err.response?.data;
   }

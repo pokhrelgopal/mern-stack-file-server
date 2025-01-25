@@ -12,4 +12,5 @@ export const userRoutes = {
   user: (id: string) => `${url}/${id}`,
   forgotPassword: `${url}/forgot-password`,
   resetPassword: `${url}/reset-password`,
+  updateProfile: (id: string) => `${url}/${id}`,
 };

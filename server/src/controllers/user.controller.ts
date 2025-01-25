@@ -227,7 +227,10 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
     if (!user) {
       return response.errorResponse(res, "User not found.", null, 404);
     }
-    const updated = await userService.update(req.params.id, data);
+    if (data.password) {
+      data.password = await getHashedPassword(data.password);
+    }
+    const updated = await userService.update(query.id, data);
     return response.successResponse(res, "User updated successfully.", {
       id: updated.id,
     });

@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import prisma from "../db/prisma";
 
@@ -16,23 +16,32 @@ export const adminOrSelf = async (
       return;
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-    (req as JwtPayload).user = decoded;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
+      id: string;
+    };
+    if (!decoded || !decoded.id) {
+      res.status(401).json({ error: "Invalid or malformed token" });
+      return;
+    }
+
+    (req as any).user = decoded;
 
     const user = await prisma.user.findUnique({
-      where: { id: (req as JwtPayload).user.userId },
+      where: { id: decoded.id },
     });
 
-    if (!user || user.id !== id) {
-      res
-        .status(403)
-        .json({ error: "Access denied: Admins only or self-access only" });
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    if (user.id !== id) {
+      res.status(403).json({ error: "Access denied: self-access only" });
       return;
     }
 
     next();
   } catch (error) {
     console.error("Middleware error:", error);
-    next(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
