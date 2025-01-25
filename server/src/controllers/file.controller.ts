@@ -23,22 +23,32 @@ const createFile = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const application = await getApplicationByName(
-      decoded.applicationName,
-      decoded.userId
+      decoded.userId,
+      decoded.applicationName
     );
 
     if (!application) {
       return response.errorResponse(res, "Application not found.");
     }
 
-    // Delegate upload logic to the upload service
-    const fileData = await uploadService.handleFileUpload(req, application.id);
+    const fileData = await uploadService.handleFileUpload(
+      req,
+      res,
+      application.id
+    );
 
     return response.successResponse(res, "File uploaded successfully.", {
       fileData,
     });
-  } catch (error) {
-    next(error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return response.errorResponse(
+        res,
+        error.message || "An unexpected error occurred."
+      );
+    } else {
+      return response.errorResponse(res, "An unexpected error occurred.");
+    }
   }
 };
 

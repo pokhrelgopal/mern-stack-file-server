@@ -27,6 +27,7 @@ const createApplication = async (
         "Application with this name already exists."
       );
     }
+
     const application = await applicationService.createApplication(data);
     return response.successResponse(res, "Application created successfully.", {
       application,

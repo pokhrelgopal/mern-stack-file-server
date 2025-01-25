@@ -1,12 +1,21 @@
 import multer from "multer";
 import path from "path";
-import { Request } from "express";
+import { Request, Response } from "express";
+import { v4 as uuidv4 } from "uuid";
 import * as fileService from "./file.service";
 import { createFileSchema } from "../schema/file.schema";
+import { errorResponse } from "../utils/response";
+import { backendUrl } from "../config";
 
 const upload = multer({
-  dest: path.join(__dirname, "../uploads"),
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
+  storage: multer.diskStorage({
+    destination: path.join(__dirname, "../uploads"),
+    filename: (req, file, cb) => {
+      const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`;
+      cb(null, uniqueName);
+    },
+  }),
+  limits: { fileSize: 50 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (
       !file.mimetype.startsWith("image/") &&
@@ -18,11 +27,15 @@ const upload = multer({
   },
 });
 
-export const handleFileUpload = (req: Request, applicationId: string) => {
+export const handleFileUpload = (
+  req: Request,
+  res: Response,
+  applicationId: string
+) => {
   return new Promise((resolve, reject) => {
     upload.single("file")(req, {} as any, async (err: any) => {
       if (err) {
-        return reject(new Error(`File upload error: ${err.message}`));
+        return reject(new Error(err.message));
       }
 
       const file = req.file;
@@ -32,9 +45,9 @@ export const handleFileUpload = (req: Request, applicationId: string) => {
 
       const fileData = {
         name: file.originalname,
-        path: file.path,
+        path: `uploads/${file.filename}`,
         size: file.size,
-        url: `/uploads/${file.filename}`,
+        url: `${backendUrl}/uploads/${file.filename}`,
         type: file.mimetype,
         applicationId,
       };
@@ -47,5 +60,7 @@ export const handleFileUpload = (req: Request, applicationId: string) => {
         reject(validationError);
       }
     });
+  }).catch((error) => {
+    return errorResponse(res, error.message);
   });
 };
