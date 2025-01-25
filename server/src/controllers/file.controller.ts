@@ -1,24 +1,43 @@
-import { ZodError } from "zod";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import * as response from "../utils/response";
-import * as schema from "../schema/file.schema";
-import * as generator from "../utils/generator";
 import * as fileService from "../services/file.service";
+import * as uploadService from "../services/upload.service";
+import { jwtSecret } from "../config";
+import { ApiKey } from "../types/apiKey";
+import { getApplicationByName } from "../services/application.service";
 
 const createFile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = schema.createFileSchema.parse({
-      ...req.body,
-    });
-    const file = await fileService.createFile(data);
-    return response.successResponse(res, "File created successfully.", {
-      file,
+    const authorization = req.headers["authorization"];
+    const apiKey = authorization?.split(" ")[1];
+    if (!apiKey) {
+      return response.errorResponse(res, "apiKey is required.");
+    }
+
+    let decoded: ApiKey;
+    try {
+      decoded = jwt.verify(apiKey, jwtSecret as string) as ApiKey;
+    } catch (error) {
+      return response.errorResponse(res, "Invalid apiKey.");
+    }
+
+    const application = await getApplicationByName(
+      decoded.applicationName,
+      decoded.userId
+    );
+
+    if (!application) {
+      return response.errorResponse(res, "Application not found.");
+    }
+
+    // Delegate upload logic to the upload service
+    const fileData = await uploadService.handleFileUpload(req, application.id);
+
+    return response.successResponse(res, "File uploaded successfully.", {
+      fileData,
     });
   } catch (error) {
-    if (error instanceof ZodError) {
-      return response.zodErrorResponse(res, error);
-    }
     next(error);
   }
 };

@@ -36,6 +36,7 @@ const getApplicationByApiKey = async (apiKey: string) => {
   try {
     const application = await prisma.application.findFirst({
       where: { apiKey },
+      select: { id: true, userId: true },
     });
     return application;
   } catch (error) {
@@ -47,6 +48,7 @@ const getApplicationByName = async (userId: string, name: string) => {
   try {
     const application = await prisma.application.findFirst({
       where: { name, userId },
+      select: { id: true },
     });
     return application;
   } catch (error) {

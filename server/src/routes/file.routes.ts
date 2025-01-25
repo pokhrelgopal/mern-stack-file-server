@@ -6,7 +6,7 @@ import { adminOrSelf } from "../middlewares/permission.middleware";
 
 const router = express.Router();
 
-router.post("/", auth, uc.createFile);
+router.post("/", uc.createFile);
 router.get("/", isAdmin, uc.getFiles);
 router.get("/:id", auth, uc.getFileById);
 router.get("/application/:applicationId", auth, uc.getFileByApplicationId);
