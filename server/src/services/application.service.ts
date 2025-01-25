@@ -25,6 +25,7 @@ const getApplicationById = async (id: string) => {
   try {
     const application = await prisma.application.findUnique({
       where: { id },
+      include: { File: true },
     });
     return application;
   } catch (error) {

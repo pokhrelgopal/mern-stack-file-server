@@ -1,6 +1,9 @@
 import axios from "axios";
 import { ApiError, ApiResponse } from "@/types/response.types";
-import { ApplicationResponse } from "@/types/application.types";
+import {
+  ApplicationDetailResponse,
+  ApplicationResponse,
+} from "@/types/application.types";
 import {
   CreateApplicationData,
   UpdateApplicationData,
@@ -16,6 +19,18 @@ export const getMyApplications = async (userId: string) => {
       }
     );
     return response.data as ApplicationResponse;
+  } catch (error) {
+    const err = error as ApiError;
+    throw err.response?.data;
+  }
+};
+
+export const getApplication = async (id: string) => {
+  try {
+    const response = await axios.get(applicationRoutes.application(id), {
+      withCredentials: true,
+    });
+    return response.data as ApplicationDetailResponse;
   } catch (error) {
     const err = error as ApiError;
     throw err.response?.data;

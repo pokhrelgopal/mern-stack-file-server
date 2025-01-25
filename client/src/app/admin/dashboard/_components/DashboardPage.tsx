@@ -7,11 +7,11 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { getMyApplications } from "@/lib/api/requests/app.requests";
 import { me } from "@/lib/api/requests";
-import Spinner from "@/components/elements/spinner";
 import { queryKeys } from "@/constants/query-keys";
 import { Application } from "@/types/application.types";
 import ApplicationCard from "./ApplicationCard";
 import { Stack } from "@/components/ui/stack";
+import { DashboardSkeleton } from "./DashboardSkeleton";
 
 const DashboardPage = () => {
   const {
@@ -43,7 +43,7 @@ const DashboardPage = () => {
   if (userLoading || applicationsLoading) {
     return (
       <article className="w-full">
-        <Spinner />
+        <DashboardSkeleton />
       </article>
     );
   }
