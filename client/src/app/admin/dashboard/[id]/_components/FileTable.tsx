@@ -24,7 +24,12 @@ import { Pagination } from "@/components/elements/pagination";
 
 const columnHelper = createColumnHelper<File>();
 
-const FileTable: React.FC<{ data: File[] }> = ({ data }) => {
+interface FileTableProps {
+  data: File[];
+  apiKey?: string;
+}
+
+const FileTable = ({ data, apiKey }: FileTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const columns: ColumnDef<File, any>[] = [
@@ -143,53 +148,60 @@ const FileTable: React.FC<{ data: File[] }> = ({ data }) => {
   });
 
   return (
-    <div className="mt-4 bg-white p-5 min-h-96 rounded-lg shadow-xs">
-      <FileTableHeader />
-      <FileTableSearch />
-      <div className="overflow-x-auto mt-4 border border-gray-200 rounded-lg">
-        <table className="min-w-full">
-          <thead className="border-b border-gray-200">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="divide-x divide-line-divider">
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    scope="col"
-                    className="p-3 text-left text-gray-600 text-b2b"
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {table.getRowModel().rows.map((row, index) => (
-              <tr
-                key={row.id}
-                className={`divide-x divide-line-divider ${
-                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                }`}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="p-2 whitespace-nowrap text-gray-600 text-b2"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="mt-4 bg-white p-5 min-h-[500px] rounded-lg shadow-xs flex flex-col justify-between">
+      <div>
+        <FileTableHeader apiKey={apiKey} />
+        <FileTableSearch />
+        <div className="overflow-x-auto mt-4 border border-gray-200 rounded-lg">
+          <table className="min-w-full">
+            <thead className="border-b border-gray-200">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr
+                  key={headerGroup.id}
+                  className="divide-x divide-line-divider"
+                >
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      scope="col"
+                      className="p-3 text-left text-gray-600 text-b2b"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {table.getRowModel().rows.map((row, index) => (
+                <tr
+                  key={row.id}
+                  className={`divide-x divide-line-divider ${
+                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  }`}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="p-2 whitespace-nowrap text-gray-600 text-b2"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-
       <div className="mt-8">
         <Pagination totalPages={10} />
       </div>

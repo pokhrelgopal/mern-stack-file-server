@@ -10,7 +10,6 @@ type CustomDialogProps = {
   trigger: React.ReactNode;
   title: string;
   children: React.ReactNode;
-  onClose: () => void;
   className?: string;
 };
 
@@ -18,16 +17,12 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
   trigger,
   title,
   children,
-  onClose,
   className,
 }) => {
   const [open, setOpen] = React.useState(false);
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
-    if (!newOpen) {
-      onClose();
-    }
   };
 
   return (
@@ -58,7 +53,11 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
                     {title}
                   </AlertDialog.Title>
                   <AlertDialog.Cancel asChild>
-                    <Button variant="ghost" size="icon" onClick={onClose}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleOpenChange(false)}
+                    >
                       <X className="h-4 w-4" />
                     </Button>
                   </AlertDialog.Cancel>

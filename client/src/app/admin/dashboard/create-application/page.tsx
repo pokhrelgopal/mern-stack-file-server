@@ -18,7 +18,6 @@ import {
   InvalidateQueryFilters,
 } from "@tanstack/react-query";
 import { createApplication } from "@/lib/api/requests/app.requests";
-import { queryKeys } from "@/constants/query-keys";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 

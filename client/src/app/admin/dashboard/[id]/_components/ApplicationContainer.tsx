@@ -42,7 +42,10 @@ const ApplicationContainer = ({ id }: Props) => {
           <KeyContainer apiKey={data?.data.application.apiKey} />
         </div>
       </div>
-      <FileTable data={data?.data.application.File as File[]} />
+      <FileTable
+        apiKey={data?.data.application.apiKey}
+        data={data?.data.application.File as File[]}
+      />
       <DangerContainer applicationId={id} />
     </>
   );
