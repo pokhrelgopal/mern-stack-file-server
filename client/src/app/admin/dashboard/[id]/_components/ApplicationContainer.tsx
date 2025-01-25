@@ -21,7 +21,12 @@ const ApplicationContainer = ({ id }: Props) => {
     queryFn: () => getApplication(id),
     enabled: !!id,
   });
-  if (isLoading) return <Spinner />;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-[calc(100vh-20rem)]">
+        <Spinner />
+      </div>
+    );
   return (
     <>
       <div className="mb-5">

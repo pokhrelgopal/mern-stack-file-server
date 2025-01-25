@@ -60,7 +60,7 @@ const DashboardPage = () => {
     );
   }
   return (
-    <article className="w-full p-4">
+    <article className="w-full">
       <Stack className="mb-4" justify="between">
         <h1 className="text-2xl font-bold">My Applications</h1>
         <Link href="/admin/dashboard/create-application">

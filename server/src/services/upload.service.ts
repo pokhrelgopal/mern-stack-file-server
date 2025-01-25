@@ -15,53 +15,40 @@ const upload = multer({
       cb(null, uniqueName);
     },
   }),
-  limits: { fileSize: 50 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    if (
-      !file.mimetype.startsWith("image/") &&
-      !file.mimetype.startsWith("application/")
-    ) {
-      return cb(new Error("Only images and application files are allowed."));
-    }
-    cb(null, true);
-  },
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
 });
 
-export const handleFileUpload = (
+export const handleFileUpload = async (
   req: Request,
   res: Response,
   applicationId: string
 ) => {
-  return new Promise((resolve, reject) => {
-    upload.single("file")(req, {} as any, async (err: any) => {
+  await new Promise<void>((resolve, reject) => {
+    upload.single("file")(req, res, (err: any) => {
       if (err) {
-        return reject(new Error(err.message));
+        return reject(err);
       }
-
-      const file = req.file;
-      if (!file) {
-        return reject(new Error("File is required."));
-      }
-
-      const fileData = {
-        name: file.originalname,
-        path: `uploads/${file.filename}`,
-        size: file.size,
-        url: `${backendUrl}/uploads/${file.filename}`,
-        type: file.mimetype,
-        applicationId,
-      };
-
-      try {
-        const validFileData = createFileSchema.parse(fileData);
-        const savedFile = await fileService.createFile(validFileData);
-
-        resolve(savedFile);
-      } catch (validationError) {
-        reject(validationError);
-      }
+      resolve();
     });
-  }).catch((error) => {
-    return errorResponse(res, error.message);
   });
+
+  const file = req.file;
+  if (!file) {
+    throw new Error("No file uploaded.");
+  }
+
+  const fileData = {
+    name: file.originalname,
+    path: `uploads/${file.filename}`,
+    size: file.size,
+    url: `${backendUrl}/uploads/${file.filename}`,
+    type: file.mimetype,
+    applicationId,
+  };
+
+  const validFileData = createFileSchema.parse(fileData);
+
+  const savedFile = await fileService.createFile(validFileData);
+
+  return savedFile;
 };

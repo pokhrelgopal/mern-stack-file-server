@@ -14,9 +14,17 @@ app.use(cookieParser());
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+const allowedOrigins = [
+  frontendUrl,
+  "http://localhost:5500",
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:5173",
+];
+
 app.use(
   cors({
-    origin: [frontendUrl, "http://localhost:5500"].filter(
+    origin: allowedOrigins.filter(
       (url): url is string => typeof url === "string"
     ),
     credentials: true,
