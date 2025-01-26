@@ -52,12 +52,12 @@ export function Toast({
 }: ToastProps) {
   return (
     <motion.div
-      initial={{ y: -50, opacity: 0 }}
+      initial={{ y: 50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      exit={{ y: -50, opacity: 0 }}
+      exit={{ y: 50, opacity: 0 }}
       transition={{ type: "spring", stiffness: 100, damping: 15 }}
       className={cn(
-        "fixed top-8 left-1/2 transform -translate-x-[calc(100vw/2)] z-50",
+        "fixed bottom-8 right-8 z-50",
         toastVariants({ variant }),
         className
       )}

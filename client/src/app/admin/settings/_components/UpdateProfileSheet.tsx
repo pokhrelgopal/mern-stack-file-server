@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Edit2, X } from "lucide-react";
+import { Edit2 } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -21,6 +21,7 @@ import {
   InvalidateQueryFilters,
 } from "@tanstack/react-query";
 import { User } from "@/types";
+import { useToast } from "@/hooks/use-toast";
 
 type Props = {
   user?: User;
@@ -38,21 +39,18 @@ const UpdateProfileSheet = ({ user }: Props) => {
       fullName: user?.fullName || "",
     },
   });
-
+  const { showToast } = useToast();
   const queryClient = useQueryClient();
-  const [status, setStatus] = React.useState<"success" | "failed" | "none">(
-    "none"
-  );
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: UpdateProfileType) =>
       updateProfile(data, user?.id as string),
     onSuccess: () => {
-      setStatus("success");
+      showToast("Profile updated successfully.", "success");
       queryClient.invalidateQueries(["me"] as InvalidateQueryFilters);
     },
-    onError: () => {
-      setStatus("failed");
+    onError: (error) => {
+      showToast(error.message, "error");
     },
   });
 
@@ -90,18 +88,6 @@ const UpdateProfileSheet = ({ user }: Props) => {
             {...register("fullName")}
             errorMessage={errors.fullName?.message}
           />
-          {status === "success" && !isPending && (
-            <div className="mt-4 p-3 flex gap-2 items-center rounded-lg bg-green-100 text-green-900">
-              <CheckCircle className="h-5 w-5 mr-2" />
-              <span>Updated Successfully.</span>
-            </div>
-          )}
-          {status === "failed" && !isPending && (
-            <div className="mt-4 p-3 flex gap-2 items-center rounded-lg bg-red-100 text-red-900">
-              <X className="h-5 w-5 mr-2" />
-              <span>Update Failed.</span>
-            </div>
-          )}
           <Stack justify={"start"}>
             <Button
               loading={isPending}
