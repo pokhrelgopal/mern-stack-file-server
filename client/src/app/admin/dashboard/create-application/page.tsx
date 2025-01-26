@@ -13,9 +13,9 @@ import {
   createApplicationSchema,
 } from "@/schemas/application";
 import {
-  QueryClient,
   useMutation,
   InvalidateQueryFilters,
+  useQueryClient,
 } from "@tanstack/react-query";
 import { createApplication } from "@/lib/api/requests/app.requests";
 import { useToast } from "@/hooks/use-toast";
@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 
 export default function CreateApplications() {
   const { showToast } = useToast();
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const router = useRouter();
   const {
     register,

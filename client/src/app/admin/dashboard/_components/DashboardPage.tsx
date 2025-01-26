@@ -30,7 +30,7 @@ const DashboardPage = () => {
     isLoading: applicationsLoading,
     error: applicationsError,
   } = useQuery({
-    queryKey: ["applications", userData?.data?.user?.id],
+    queryKey: ["application", userData?.data?.user?.id],
     queryFn: () => getMyApplications(userData?.data?.user?.id || ""),
     enabled: !!userData?.data?.user?.id,
     retry: 1,

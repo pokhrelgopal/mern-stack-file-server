@@ -1,9 +1,14 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { Stack } from "@/components/ui/stack";
 
 export function DashboardSkeleton() {
   return (
-    <div className="p-5 space-y-5">
-      <Skeleton className="h-8 w-[200px]" />
+    <div className="space-y-5">
+      <Stack justify={"between"}>
+        <Skeleton className="h-8 w-[200px]" />
+        <Skeleton className="h-8 w-[200px]" />
+      </Stack>
+
       <div className="grid grid-cols-3 gap-6">
         {Array.from({ length: 5 }).map((_, i) => (
           <Card key={i} />
