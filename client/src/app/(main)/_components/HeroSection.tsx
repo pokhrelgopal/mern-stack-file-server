@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight } from "iconsax-react";
 import HeroNav from "./HeroNav";
+import { Button } from "@/components/ui/button";
 
 export default function HeroSection() {
   const containerVariants = {
@@ -41,7 +42,7 @@ export default function HeroSection() {
   };
 
   return (
-    <article className="min-h-screen my-auto bg-gradient-to-r from-zinc-900 to-blue-800">
+    <article className="min-h-screen relative my-auto overflow-x-hidden">
       <HeroNav />
       <motion.main
         className="container mx-auto px-4 pt-40 text-center"
@@ -50,25 +51,25 @@ export default function HeroSection() {
         animate="visible"
       >
         <motion.h1
-          className="text-4xl md:text-7xl font-bold text-white mb-6 flex flex-col"
+          className="text-4xl md:text-7xl font-bold text-green-700 mb-6 flex flex-col"
           variants={itemVariants}
         >
           <span>Easy and better file uploads for</span>
           <span className="pt-2 text-red-600">Web Developers</span>
         </motion.h1>
         <motion.p
-          className="text-white text-xl mb-8 max-w-2xl mx-auto"
+          className="text-gray-700 text-xl mb-8 max-w-2xl mx-auto"
           variants={itemVariants}
         >
           Upload your files with ease, share them with your friends, and manage
           them with a few clicks.
         </motion.p>
         <motion.div variants={itemVariants}>
-          <Link href="/">
-            <button className="mx-auto flex items-center gap-2 text-xl bg-white text-red-600 font-semibold h-14 px-16 rounded-full hover:bg-gray-100 transition duration-300">
+          <Link href="/admin/register">
+            <Button size={"lg"} className="rounded-full">
               <span>Get Started</span>
-              <ArrowRight className="size-4 stroke-red-600" />
-            </button>
+              <ArrowRight className="size-4 stroke-white" />
+            </Button>
           </Link>
         </motion.div>
       </motion.main>
@@ -87,6 +88,10 @@ export default function HeroSection() {
           ))}
         </div>
       </motion.div>
+      <div className="absolute w-[400px] h-[400px] bg-green-100 rounded-full bottom-40 -right-20 blur-[100px]" />
+      <div className="absolute w-[400px] h-[400px] bg-green-100 rounded-full -bottom-20 right-20  blur-[100px]" />
+      <div className="absolute w-[400px] h-[400px] bg-indigo-100 rounded-full -bottom-40 right-[40%]  blur-[100px]" />
+      <div className="absolute w-[400px] h-[400px] bg-cyan-100 rounded-full -bottom-40 left-0  blur-[100px]" />
     </article>
   );
 }

@@ -24,9 +24,6 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
 const FileTableHeader: React.FC<{ apiKey?: string }> = ({ apiKey }) => {
   const { showToast } = useToast();
-  const [status, setStatus] = React.useState<"success" | "failed" | "none">(
-    "none"
-  );
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: (file: File) => {
@@ -36,10 +33,9 @@ const FileTableHeader: React.FC<{ apiKey?: string }> = ({ apiKey }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["application"] as InvalidateQueryFilters);
-      setStatus("success");
+      showToast("File uploaded successfully.", "success");
     },
     onError: (error) => {
-      setStatus("failed");
       showToast(error.message, "error");
     },
   });
@@ -101,18 +97,6 @@ const FileTableHeader: React.FC<{ apiKey?: string }> = ({ apiKey }) => {
                   </section>
                 )}
               </Dropzone>
-              {status === "success" && !isPending && (
-                <div className="mt-4 p-3 flex gap-2 items-center rounded-lg bg-green-100 text-green-900">
-                  <CheckCircle className="h-5 w-5 mr-2" />
-                  <span>Updated Successfully.</span>
-                </div>
-              )}
-              {status === "failed" && !isPending && (
-                <div className="mt-4 p-3 flex gap-2 items-center rounded-lg bg-red-100 text-red-900">
-                  <X className="h-5 w-5 mr-2" />
-                  <span>Update Failed.</span>
-                </div>
-              )}
             </div>
           )}
         </SheetContent>

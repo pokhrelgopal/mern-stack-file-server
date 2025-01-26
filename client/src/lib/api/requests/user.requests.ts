@@ -3,6 +3,7 @@ import {
   LoginFormData,
   RegisterFormData,
   UpdateProfileType,
+  VerifyEmailFormData,
 } from "@/schemas/auth";
 import { ApiError, ApiResponse } from "@/types/response.types";
 import { userRoutes } from "../routes/user.routes";
@@ -61,9 +62,9 @@ export const me = async () => {
   }
 };
 
-export const verifyUser = async (email: string, otp: string) => {
+export const verifyUser = async (data: VerifyEmailFormData) => {
   try {
-    const response = await axios.post(userRoutes.verify, { email, otp });
+    const response = await axios.post(userRoutes.verify, data);
     return response.data as ApiResponse;
   } catch (error) {
     const err = error as ApiError;

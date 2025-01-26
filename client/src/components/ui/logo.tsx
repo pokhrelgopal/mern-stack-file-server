@@ -9,7 +9,7 @@ type LogoProps = {
 
 const Logo = (props: LogoProps & React.SVGProps<SVGSVGElement>) => {
   return (
-    <Link href="/admin/dashboard" className="flex items-center gap-1">
+    <Link href="/" className="flex items-center gap-1">
       <Image
         src="/assets/logo.svg"
         alt="Logo"

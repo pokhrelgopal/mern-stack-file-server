@@ -5,6 +5,7 @@ const publicRoutes = [
   "/admin/login",
   "/admin/register",
   "/admin/forgot-password",
+  "/admin/onboarding",
 ];
 
 const restrictedIfLoggedIn = [
@@ -12,6 +13,7 @@ const restrictedIfLoggedIn = [
   "/admin/register",
   "/admin/forgot-password",
   "/admin/reset-password",
+  "/admin/onboarding",
 ];
 
 interface DecodedToken {
