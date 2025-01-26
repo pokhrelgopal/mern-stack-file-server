@@ -1,22 +1,15 @@
 "use client";
 import { useState, useRef, useCallback } from "react";
-import { ChevronDown } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { me } from "@/lib/api/requests";
 import UserMenuSkeleton from "./UserMenuSkeleton";
-import UserDropdown from "./UserDropdown";
 import useOnClickOutside from "@/hooks/use-outside-click";
 
 const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null!);
 
-  const {
-    data: response,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: response, isLoading } = useQuery({
     queryKey: ["me"],
     queryFn: me,
   });
@@ -45,15 +38,7 @@ const UserMenu = () => {
             {response?.data.user?.email || "No email"}
           </p>
         </div>
-
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <ChevronDown className="h-4 w-4 text-gray-600" />
-        </motion.div>
       </button>
-      <AnimatePresence>{isOpen && <UserDropdown />}</AnimatePresence>
     </div>
   );
 };
