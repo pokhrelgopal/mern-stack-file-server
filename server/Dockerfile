@@ -4,6 +4,11 @@ FROM node:20-alpine
 # Set working directory
 WORKDIR /app
 
+# Install wait-for-it script to wait for PostgreSQL to be ready
+RUN apk add --no-cache wget
+RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
@@ -13,11 +18,15 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Generate Prisma client and push database schema
-RUN npx prisma generate && npx prisma db push
+# Generate Prisma client
+RUN npx prisma generate
 
-# Expose port (adjust as needed)
-EXPOSE 8000
+# Use an entrypoint script to wait for PostgreSQL and then run migrations
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Command to run the application
-CMD ["npm", "run", "dev"]
+# Expose port
+EXPOSE 5000
+
+# Use the entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]
