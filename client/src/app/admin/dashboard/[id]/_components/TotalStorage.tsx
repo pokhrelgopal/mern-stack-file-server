@@ -16,7 +16,7 @@ const TotalStorage: React.FC<Props> = ({ totalStorage = 0 }) => {
         <Database className="h-10 w-10" strokeWidth={1} />
       </div>
       <p className="mt-3">
-        <span className="text-2xl font-bold">{totalStorageGb}</span> GB Occupied
+        <span className="text-2xl font-bold">{totalStorageGb}</span> MB Occupied
       </p>
     </Card>
   );

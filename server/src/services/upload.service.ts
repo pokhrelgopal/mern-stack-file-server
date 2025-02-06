@@ -4,7 +4,6 @@ import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import * as fileService from "./file.service";
 import { createFileSchema } from "../schema/file.schema";
-import { errorResponse } from "../utils/response";
 import { backendUrl } from "../config";
 
 const upload = multer({
